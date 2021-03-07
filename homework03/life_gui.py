@@ -58,8 +58,8 @@ class GUI(UI):
 
         # Создание списка клеток
         # PUT YOUR CODE HERE
-        run, pause = 0, 1
-        status = pause
+        is_run, is_paused = 0, 1
+        status_of_game = is_paused
         position = []
         running = True
         # grid = GameOfLife.create_grid(self, True)
@@ -69,17 +69,17 @@ class GUI(UI):
                     running = False
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_LCTRL:
-                        status = pause
+                        status_of_game = is_paused
                     if event.key == pygame.K_SPACE:
-                        status = run
-                if status == pause:
+                        status_of_game = is_run
+                if status_of_game == is_paused:
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         if event.button == 1:
                             position.append(event.pos)
 
             self.draw_grid()
             self.draw_lines()
-            if status == pause:
+            if status_of_game == is_paused:
                 if not (position == []):
                     for pos in position:
                         a = pos[0] // self.cell_size
