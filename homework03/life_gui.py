@@ -1,5 +1,6 @@
 import random
 import typing as tp
+import argparse
 
 import pygame
 from life import GameOfLife
@@ -15,6 +16,8 @@ class GUI(UI):
     def __init__(self, life: GameOfLife, cell_size: int = 10, speed: int = 10) -> None:
         super().__init__(life)
         self.cell_size = cell_size
+        if self.cell_size == None:
+            self.cell_size = 10
         self.width = self.life.cols * self.cell_size
         self.height = self.life.rows * self.cell_size
 
@@ -105,9 +108,19 @@ class GUI(UI):
 
 
 if __name__ == "__main__":
-    game = GameOfLife((50, 70), randomize=True)
+    parser = argparse.ArgumentParser(description='This is a GUI version of game "Life". Here there is a list of '
+                                                 'arguments you can specify')
+    parser.add_argument('--width', type=int, help='A width of the game\'s screen')
+    parser.add_argument('--height', type=int, help='A height of the game\'s screen')
+    parser.add_argument('--cell-size', type=int, help='A size of a sell in the game')
+    args = parser.parse_args()
+    print(args.width)
+    print(args.height)
+    print(args.cell_size)
+
+    game = GameOfLife((args.width, args.height), randomize=True)
     # Grid = game.create_grid(True)
     # print("After: ", Grid)
 
-    gui = GUI(game, speed=30)
+    gui = GUI(game, cell_size=args.cell_size, speed=30)
     gui.run()

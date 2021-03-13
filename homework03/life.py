@@ -1,3 +1,4 @@
+import math
 import pathlib
 import random
 import typing as tp
@@ -14,17 +15,17 @@ class GameOfLife:
     def __init__(
             self,
             size: tp.Tuple[int, int],
-            randomize: bool = True,
-            max_generations: tp.Optional[float] = float("inf"),
+            randomize: bool = True
     ) -> None:
         # Размер клеточного поля
+        self.max_generations = math.inf
         self.rows, self.cols = size
         # Предыдущее поколение клеток
         self.prev_generation = self.create_grid()
         # Текущее поколение клеток
         self.curr_generation = self.create_grid(randomize=randomize)
         # Максимальное число поколений
-        self.max_generations = max_generations
+        # self.max_generations = max_generations
         # Текущее число поколений
         self.generations = 1
 
@@ -125,21 +126,22 @@ class GameOfLife:
     def step(self) -> None:
         self.prev_generation = self.curr_generation
         self.curr_generation = self.get_next_generation()
-        self.generations += 1
+        self.generations = self.generations + 1
 
     @property
     def is_max_generations_exceeded(self) -> bool:
         """
         Не превысило ли текущее число поколений максимально допустимое.
         """
-        return self.generations >= self.max_generations
+
+        return self.generations > self.max_generations
 
     @property
     def is_changing(self) -> bool:
         """
         Изменилось ли состояние клеток с предыдущего шага.
         """
-        return self.curr_generation != self.prev_generation
+        return not self.curr_generation.__eq__(self.prev_generation)
 
     @staticmethod
     def from_file(filename: pathlib.Path) -> "GameOfLife":
@@ -175,14 +177,13 @@ class GameOfLife:
         for i in self.curr_generation:
             string = ""
             for j in i:
-                print("j="+str(j))
-                string+=str(j)
-            string+='\n'
+                print("j=" + str(j))
+                string += str(j)
+            string += '\n'
             print("string which will be appended: " + string)
             f.write(str(string))
         # f.read()
         f.close()
-
 
 # life1 = GameOfLife((5,5))
 # life1 = GameOfLife.from_file(pathlib.Path('glider.txt'))
