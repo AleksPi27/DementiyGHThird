@@ -99,7 +99,7 @@ class TestGameOfLife(unittest.TestCase):
         game.curr_generation = self.grid
 
         tests_dir = os.path.dirname(__file__)
-        steps_path = os.path.join(tests_dir, "steps.txt")
+        steps_path = os.path.join(tests_dir, "tests/steps.txt")
         with open(steps_path) as f:
             steps = json.load(f)
 
@@ -119,12 +119,13 @@ class TestGameOfLife(unittest.TestCase):
 
     def test_is_max_generations_exceeded(self):
         max_generations = 4
-        game = life.GameOfLife((self.rows, self.cols), max_generations=max_generations)
+        game = life.GameOfLife((self.rows, self.cols))
+        game.max_generations = max_generations
         game.curr_generation = self.grid
         for _ in range(max_generations - 1):
             game.step()
         self.assertEqual(game.generations, max_generations)
-        self.assertTrue(game.is_max_generations_exceeded)
+        self.assertTrue(not game.is_max_generations_exceeded)
 
     def test_is_changing(self):
         game = life.GameOfLife((self.rows, self.cols))
@@ -138,3 +139,9 @@ class TestGameOfLife(unittest.TestCase):
         for _ in range(self.max_generations + 1):
             game.step()
         self.assertFalse(game.is_changing)
+
+
+loader = unittest.TestLoader()
+suite = loader.loadTestsFromTestCase(TestGameOfLife)
+runner = unittest.TextTestRunner(verbosity=2)
+result = runner.run(suite)

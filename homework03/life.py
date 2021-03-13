@@ -194,3 +194,4 @@ class GameOfLife:
 #     print(life1.curr_generation)
 # # print(life1.curr_generation)
 # life1.save(pathlib.Path('glider-4-steps.txt'))
+
